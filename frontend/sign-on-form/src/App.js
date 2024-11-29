@@ -1,3 +1,4 @@
+import "./index.css";
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { LoginSignupScreen, ResumeScreen } from "./screens";
@@ -7,9 +8,9 @@ function App() {
     <Router>
       <Routes>
         {/* Default login/signup screen */}
-        <Route path="/" element={<LoginSignupScreen />} />
+        <Route path="/login" element={<LoginSignupScreen />} />
         {/* Resume upload screen */}
-        <Route path="/resumeUpload" element={<ResumeScreen />} />
+        <Route path="/" element={<ResumeScreen />} />
         {/* Fallback for unmatched routes */}
         <Route
           path="*"
