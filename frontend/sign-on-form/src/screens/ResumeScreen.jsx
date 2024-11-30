@@ -56,7 +56,7 @@ export default function ResumeScreen() {
       return;
     }
   
-    const allowedTypes = ["application/pdf", "text/plain"]; // Allowed MIME types
+    const allowedTypes = ["application/pdf", "text/plain","application/vnd.openxmlformats-officedocument.wordprocessingml.document"]; // Allowed MIME types
     const fileType = resume.type;
 
     if (allowedTypes.includes(fileType)) {
@@ -132,7 +132,7 @@ export default function ResumeScreen() {
       <ToggleGroupItem variant="outline" value="fileUpload" aria-label="Toggle bold">
         <Paperclip className="h-4 w-4" /> File Upload
       </ToggleGroupItem></TooltipTrigger>
-      <TooltipContent>Upload a PDF or TXT file</TooltipContent>
+      <TooltipContent>Upload a PDF, docx or TXT file</TooltipContent>
       </Tooltip> 
      
       <ToggleGroupItem  variant="outline" value="textInput" aria-label="Toggle italic">
