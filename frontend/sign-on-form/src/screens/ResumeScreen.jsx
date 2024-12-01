@@ -56,7 +56,7 @@ export default function ResumeScreen() {
       return;
     }
   
-    const allowedTypes = ["application/pdf", "text/plain"]; // Allowed MIME types
+    const allowedTypes = ["application/pdf"]; // Allowed MIME types
     const fileType = resume.type;
 
     if (allowedTypes.includes(fileType)) {
