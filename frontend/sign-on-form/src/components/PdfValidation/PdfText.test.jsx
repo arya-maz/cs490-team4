@@ -1,3 +1,5 @@
+//task 10: Add Validation for Input Types (File Size, Format, Character Count)
+
 import { isPDF, inputCharLength } from "./PdfTextValidation.jsx";
 
 // Mocking window.alert to avoid jsdom errors during tests
