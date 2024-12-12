@@ -1,5 +1,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button.tsx"
+import jsPDF from 'jspdf';
+import mammoth from 'mammoth';
 import {Paperclip,LetterText, AArrowUp, FileUp} from "lucide-react"
 import {
   Card,
@@ -41,6 +43,67 @@ export default function ResumeScreen() {
   const jobDescriptionCharLimit = 500;
   const resumeTextCharLimit = 1000;
   const [tabValue, setTabValue] = React.useState("resume");
+  
+  const uploadToBackend = (blob)=>{
+    setTimeout(()=>{
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = "tempFile"
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(url);
+    },5000)
+  }
+
+  const convertTextToPDF = (text) => {
+    const doc = new jsPDF();
+    const pageHeight = doc.internal.pageSize.height; // Page height
+    const margin = 10; // Margin from the edges
+    const lineHeight = 10; // Line height for text
+    let y = margin; // Starting Y position for text
+
+    const lines = doc.splitTextToSize(text, doc.internal.pageSize.width - margin * 2); // Split text to fit width
+
+    lines.forEach((line) => {
+        if (y + lineHeight > pageHeight - margin) {
+            // If the line exceeds the page height, add a new page
+            doc.addPage();
+            y = margin; // Reset Y position for new page
+        }
+        doc.text(line, margin, y); // Add text to the current position
+        y += lineHeight; // Increment Y position for the next line
+    });
+
+    const pdfBlob = doc.output('blob'); // Generate the PDF as a Blob
+    return pdfBlob;
+};
+
+  
+  const handleTxtFile = (file)=>{
+    const reader = new FileReader();
+    reader.onload = ()=>{
+      const text = reader.result;
+      const pdfBlob = convertTextToPDF(text);
+      uploadToBackend(pdfBlob);
+    
+    }
+    reader.readAsText(file);
+  }
+
+  const handleDocxFile = (file)=>{
+    const reader = new FileReader();
+    reader.onload = async ()=>{
+      const arrayBuffer = reader.result;
+      const result = await mammoth.extractRawText({arrayBuffer});
+      const pdfBlob = convertTextToPDF(result.value);
+      uploadToBackend(pdfBlob);
+    }
+    reader.readAsArrayBuffer(file);
+  }
   const handleResumeChange = (e) => {
     const file = e.target.files?.[0] || null;
     setResume(file);
@@ -49,7 +112,7 @@ export default function ResumeScreen() {
   const handleResumeUpload = () => {
     let title, description;
 
-    if (!resume) {
+    if (!(resume || resumeText)) {
       title = "Upload Error";
       description = "Please select a file to upload.";
       toast({title:title, description:description});
@@ -63,7 +126,15 @@ export default function ResumeScreen() {
       title = "Upload Success";
       description = `File: ${resume.name} uploaded successfully.`;
       setTabValue("jobDesc");
+
       // Proceed with the upload or further processing
+      if(fileType === "text/plain"){
+        handleTxtFile(resume)
+      }else if(fileType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document"){
+        handleDocxFile(resume)
+      }else if(fileType === "application/pdf"){
+        uploadToBackend(resume)
+      }
     } else {
       title = "Upload Error";
       description = "Please upload a valid PDF or TXT file.";
@@ -95,11 +166,15 @@ export default function ResumeScreen() {
     }else{
       title = "Upload Success";
       description = `Text uploaded successfully.`;
+      let pdfBlob = convertTextToPDF(resumeText);
+      uploadToBackend(pdfBlob);
       setTabValue("jobDesc");
       toast({title:title, description:description});
+      return;
     }
 
   }
+
   const handleResumeInputType = (value) => {
     if(!value) return;
     setResume(null);
@@ -144,7 +219,7 @@ export default function ResumeScreen() {
             {resumeTabValue === "fileUpload" && <><Label htmlFor="resume">Resume File</Label>
            
 
-            <Input id="resume" type="file" accept=".pdf,.txt" onChange={handleResumeChange}/></>}
+            <Input id="resume" type="file" accept=".pdf,.txt,application/vnd.openxmlformats-officedocument.wordprocessingml.document" onChange={handleResumeChange}/></>}
 
             {resumeTabValue === "textInput" && <><Label htmlFor="resume">Resume Text</Label>
            
