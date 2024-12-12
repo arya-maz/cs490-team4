@@ -1,12 +1,12 @@
 //task 7: Integrate Frontend with Authentication API
 
 import axios from 'axios';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 // Login Function
-export const login = async (username, password) => {
+export const login = async (email, password) => {
   try {
-    const response = await axios.post('http://localhost:8000/api/login', { username, password });
+    const response = await axios.post('http://localhost:8000/api/login', { email, password });
     const { token } = response.data;
     localStorage.setItem('token', token); // Save JWT to localStorage
     console.log('Login successful:', token);
@@ -29,11 +29,17 @@ export const register = async (username, email, password) => {
   }
 };
 
-// Logout Function
-export const logout = (navigate) => {
-  localStorage.removeItem('token'); // Clear JWT
-  console.log('Logged out successfully.');
-  navigate('/login'); // Redirect to login page
+// Custom Hook for Logout
+export const useLogout = () => {
+  const navigate = useNavigate(); // Initialize useNavigate inside the custom hook
+  
+  const logout = () => {
+    localStorage.removeItem('token'); // Clear JWT
+    console.log('Logged out successfully.');
+    navigate('/login'); // Redirect to login page
+  };
+
+  return { logout };
 };
 
 // Check Authentication
@@ -44,9 +50,13 @@ export const isAuthenticated = () => {
 
 // Protected Route Component
 export const ProtectedRoute = ({ children }) => {
+  const navigate = useNavigate();  // Using useNavigate instead of Navigate
+  
   const token = localStorage.getItem('token');
   if (!token) {
-    return <Navigate to="/login" />; // Redirect to login if not authenticated
+    navigate('/login');  // Redirect to login using navigate
+    return null;  // Return null while redirecting
   }
+  
   return children; // Render protected content if authenticated
 };

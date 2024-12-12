@@ -1,6 +1,7 @@
 //import React from 'react';
 //import { render, screen } from "@testing-library/react";
-import { handleLogin, handleRegister} from './LoginRegister.jsx';
+//import {} from "./LoginRegister.jsx"
+import { login, register } from '../AuthenticationAPI/AuthenAPI.jsx';
 import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
 
@@ -19,7 +20,7 @@ describe("Captures Login info", () => {
     mock.onPost("api/login").reply(200, { message: "Login successful"});
 
     // Call the handleLogin function
-    const response = await handleLogin("Steph-Curry", "password123");
+    const response = await login("Steph-Curry", "password123");
 
     // Behaviour assertion
     expect(response).toEqual({ message: "Login successful" });
@@ -31,7 +32,7 @@ describe("Captures Login info", () => {
     mock.onPost("api/login").reply(401, { message: "Invalid credentials"});
 
     try {
-      await handleLogin("Steph-Curry", "@4rings"); 
+      await login("Steph-Curry", "@4rings"); 
     } catch (error) {
       //behaviour assertion
       expect(error.response.data).toEqual({ message: "Invalid credentials"});
@@ -52,7 +53,7 @@ describe("Captures Register info", () => {
     mock.onPost("/api/register").reply(201, { message: "Registration successful" });
 
     // Call the handleRegister function
-    const response = await handleRegister("newuser", "test@example.com", "password123");
+    const response = await register("newuser", "test@example.com", "password123");
 
     // Behaviour assertion
     expect(response).toEqual({ message: "Registration successful" });
@@ -64,7 +65,7 @@ describe("Captures Register info", () => {
     mock.onPost("/api/register").reply(400, { message: "Email already exists" });
 
     try {
-      await handleRegister("newuser", "test@example.com", "password123");
+      await register("newuser", "test@example.com", "password123");
     } catch (error) {
       // Behaviour assertion
       expect(error.response.data).toEqual({ message: "Email already exists" });

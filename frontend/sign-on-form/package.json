@@ -83,6 +83,9 @@
   "jest": {
     "transform": {
       "^.+\\.[tj]sx?$": "babel-jest"
-    }
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!axios|react-router-dom)/"
+    ]
   }
 }

@@ -1,15 +1,13 @@
-//task 6: Develop Frontend Components for Registration and Login Forms
-
 import React, { useState } from 'react';
 import './LoginRegister.css';
 import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { login, register } from '../AuthenticationAPI/AuthenAPI.jsx';
 
 // Renders the login-register page
 const LoginRegister = ({ action, registerLink, loginLink }) => {
   const navigate = useNavigate();
-  const [loginUsername, setLoginUsername] = useState('');
+  const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
 
   const [registerUsername, setRegisterUsername] = useState('');
@@ -24,7 +22,7 @@ const LoginRegister = ({ action, registerLink, loginLink }) => {
         <form
           onSubmit={async (e) => {
             e.preventDefault();
-            const success = await login(loginUsername, loginPassword);
+            const success = await login(loginEmail, loginPassword);
             if (success) {
               navigate('/resumeUpload'); // Redirect after successful login
             } else {
@@ -35,13 +33,13 @@ const LoginRegister = ({ action, registerLink, loginLink }) => {
           <h1>Login</h1>
           <div className="input-box">
             <input
-              type="text"
-              placeholder="Username"
-              value={loginUsername}
-              onChange={(e) => setLoginUsername(e.target.value)}
+              type="email"
+              placeholder="Email"
+              value={loginEmail}
+              onChange={(e) => setLoginEmail(e.target.value)}
               required
             />
-            <FaUser className="icon" />
+            <FaEnvelope className="icon" />
           </div>
           <div className="input-box">
             <input
@@ -152,22 +150,18 @@ const LoginRegister = ({ action, registerLink, loginLink }) => {
   );
 };
 
-// Manages the state of each active form(login or register)
+// Manages the state of each active form (login or register)
 const LoginRegisterContainer = () => {
-  // action: holds current form state. By default, the login page
-  // setAction: used to update the 'action' state
   const [action, setAction] = useState('');
 
-  // helper functions
   const registerLink = () => setAction('active'); // activates the register form
   const loginLink = () => setAction(''); // resets the action state to the login page
 
   return (
-    //LoginRegister: component that renders the html
     <LoginRegister
-      action={action} //property that gives info on what form is active(login or register)
-      registerLink={registerLink} //used to activate the register form
-      loginLink={loginLink} // used to activate the login form
+      action={action}
+      registerLink={registerLink}
+      loginLink={loginLink}
     />
   );
 };

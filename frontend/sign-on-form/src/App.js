@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { LoginSignupScreen, ResumeScreen } from "./screens";
+import { LoginSignupScreen, ResumeScreen, DashboardScreen } from "./screens";
 
 function App() {
   return (
@@ -10,6 +10,8 @@ function App() {
         <Route path="/" element={<LoginSignupScreen />} />
         {/* Resume upload screen */}
         <Route path="/resumeUpload" element={<ResumeScreen />} />
+        {/*Dashboard screen*/}
+        <Route path="/dashboard" element={<DashboardScreen />} />
         {/* Fallback for unmatched routes */}
         <Route
           path="*"
