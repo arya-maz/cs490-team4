@@ -1,10 +1,8 @@
-import { Line, LineChart, ResponsiveContainer, Tooltip } from 'recharts'
+import React from 'react';
+import { Line, LineChart, ResponsiveContainer, Tooltip } from 'recharts';
+import PropTypes from 'prop-types';
 
-interface AverageFitScoreProps {
-  data: { date: string; score: number }[]
-}
-
-export function AverageFitScore({ data }: AverageFitScoreProps) {
+export function AverageFitScore({ data }) {
   return (
     <div className="h-[200px] flex items-end justify-center">
       <ResponsiveContainer width="90%" height="80%">
@@ -44,3 +42,11 @@ export function AverageFitScore({ data }: AverageFitScoreProps) {
   )
 }
 
+AverageFitScore.propTypes = {
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      date: PropTypes.string.isRequired,
+      score: PropTypes.number.isRequired,
+    })
+  ).isRequired,
+};

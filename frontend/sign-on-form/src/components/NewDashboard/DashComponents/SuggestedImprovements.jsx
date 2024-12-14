@@ -1,14 +1,8 @@
-import { Check } from 'lucide-react'
+import React from 'react';
+import { Check } from 'lucide-react';
+import PropTypes from 'prop-types';
 
-interface Improvement {
-  text: string
-}
-
-interface SuggestedImprovementsProps {
-  improvements: Improvement[]
-}
-
-export function SuggestedImprovements({ improvements }: SuggestedImprovementsProps) {
+export function SuggestedImprovements({ improvements }) {
   return (
     <ul className="space-y-2 overflow-auto">
       {improvements.map((improvement, index) => (
@@ -21,3 +15,10 @@ export function SuggestedImprovements({ improvements }: SuggestedImprovementsPro
   )
 }
 
+SuggestedImprovements.propTypes = {
+  improvements: PropTypes.arrayOf(
+    PropTypes.shape({
+      text: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+};

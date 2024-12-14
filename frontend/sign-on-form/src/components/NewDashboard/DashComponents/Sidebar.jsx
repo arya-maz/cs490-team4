@@ -1,14 +1,12 @@
-import Link from 'next/link'
-import { Home, LogOut } from 'lucide-react'
-import { Button } from "@/components/ui/button2"
+import React from 'react';
+import { Home, LogOut } from 'lucide-react';
+import PropTypes from 'prop-types';
 
 const navItems = [
   { icon: Home, label: 'Dashboard', href: '/dashboard' },
-]
+];
 
-interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-export function Sidebar({ className, ...props }: SidebarProps) {
+export function Sidebar({ className, ...props }) {
   return (
     <div className={`bg-card flex flex-col ${className}`} {...props}>
       <div className="p-6">
@@ -16,27 +14,30 @@ export function Sidebar({ className, ...props }: SidebarProps) {
       </div>
       <nav className="flex-1 mt-6">
         {navItems.map((item) => (
-          <Link
+          <a
             key={item.href}
             href={item.href}
             className="flex items-center px-6 py-3 text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors duration-200"
           >
             <item.icon className="h-5 w-5 mr-3" />
             {item.label}
-          </Link>
+          </a>
         ))}
       </nav>
       <div className="p-6">
-        <Button 
-          variant="ghost" 
-          className="w-full justify-start text-white hover:text-white hover:bg-accent"
+        <button 
+          className="w-full flex items-center justify-start px-4 py-2 text-white hover:text-white hover:bg-accent rounded-md transition-colors duration-200"
           onClick={() => console.log('Logout clicked')}
         >
           <LogOut className="mr-2 h-4 w-4" />
           Logout
-        </Button>
+        </button>
       </div>
     </div>
   )
 }
+
+Sidebar.propTypes = {
+  className: PropTypes.string,
+};
 

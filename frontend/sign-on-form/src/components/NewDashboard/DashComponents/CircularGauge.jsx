@@ -1,9 +1,7 @@
-interface CircularGaugeProps {
-  score: number;
-  maxScore: number;
-}
+import React from 'react';
+import PropTypes from 'prop-types';
 
-export function CircularGauge({ score, maxScore }: CircularGaugeProps) {
+export function CircularGauge({ score, maxScore }) {
   const percentage = (score / maxScore) * 100;
   const strokeDasharray = `${percentage}, 100`;
 
@@ -36,3 +34,7 @@ export function CircularGauge({ score, maxScore }: CircularGaugeProps) {
   )
 }
 
+CircularGauge.propTypes = {
+  score: PropTypes.number.isRequired,
+  maxScore: PropTypes.number.isRequired,
+};

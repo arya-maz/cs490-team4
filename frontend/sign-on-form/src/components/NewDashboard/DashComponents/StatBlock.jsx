@@ -1,12 +1,8 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card2"
+import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import PropTypes from 'prop-types';
 
-interface StatBlockProps {
-  title: string
-  children: React.ReactNode
-  className?: string
-}
-
-export function StatBlock({ title, children, className }: StatBlockProps) {
+export function StatBlock({ title, children, className }) {
   return (
     <Card className={`bg-card text-card-foreground ${className}`}>
       <CardHeader>
@@ -17,3 +13,8 @@ export function StatBlock({ title, children, className }: StatBlockProps) {
   )
 }
 
+StatBlock.propTypes = {
+  title: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+};
