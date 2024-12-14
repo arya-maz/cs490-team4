@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from "@/components/ui/button.tsx"
+import { Button } from "@/components/ui/button2.tsx"
 import jsPDF from 'jspdf';
 import mammoth from 'mammoth';
 import {Paperclip,LetterText, AArrowUp, FileUp} from "lucide-react"
@@ -10,7 +10,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card.tsx"
+} from "@/components/ui/card2.tsx"
 import { Input } from "@/components/ui/input.tsx"
 import { Label } from "@/components/ui/label.tsx"
 import {
