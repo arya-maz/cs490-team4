@@ -24,7 +24,7 @@ const LoginRegister = ({ action, registerLink, loginLink }) => {
             e.preventDefault();
             const success = await login(loginEmail, loginPassword);
             if (success) {
-              navigate('/resumeUpload'); // Redirect after successful login
+              navigate('/dashboard2'); // Redirect after successful login
             } else {
               alert('Login failed. Please check your credentials.');
             }

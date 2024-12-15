@@ -34,9 +34,10 @@ export const useLogout = () => {
   const navigate = useNavigate(); // Initialize useNavigate inside the custom hook
   
   const logout = () => {
+    console.log('Logout button clicked'); // Debugging message
     localStorage.removeItem('token'); // Clear JWT
     console.log('Logged out successfully.');
-    navigate('/login'); // Redirect to login page
+    navigate('/'); // Redirect to login page
   };
 
   return { logout };
