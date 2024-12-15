@@ -24,7 +24,7 @@ const averageFitScoreData = [
 export default function DashboardPage() {
   return (
     <div className="flex gap-6 h-full">
-      <div className="w-1/3">
+      <div className="w-[20%]">
         <ResumeScreen title="Input" className="h-full">
           <div className="h-full flex items-center justify-center text-muted-foreground">
             Input Area
