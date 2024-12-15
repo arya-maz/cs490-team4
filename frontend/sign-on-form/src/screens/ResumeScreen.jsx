@@ -43,21 +43,60 @@ export default function ResumeScreen() {
   const jobDescriptionCharLimit = 500;
   const resumeTextCharLimit = 1000;
   const [tabValue, setTabValue] = React.useState("resume");
+  const base_url = "http://127.0.0.1:8000"
   
-  const uploadToBackend = (blob)=>{
-    setTimeout(()=>{
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = "tempFile"
+    //write code to upload the blob to the backend endpoint http://127.0.0.1:8000/ the endpoint accepts json resume_file *string($binary)
+    const uploadToBackend = async (blob) => {
+      const formData = new FormData();
+      formData.append('resume_file', blob);
+    
+      try {
+        const response = await fetch(`${base_url}/api/resume-upload`, {
+          method: 'POST',
+          body: formData,
+        });
+    
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+    
+        const data = await response.json(); //should have uid
+        return true;
+      } catch (error) {
+        
+        return false;
+      }
+    };
 
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      URL.revokeObjectURL(url);
-    },5000)
-  }
+    const uploadJobDescription = async () => {
+      const payload = {
+        job_description: jobDescription,
+      };
+      let title,description;
+      try {
+        const response = await fetch(`${base_url}/api/job-description`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+    
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+    
+        const data = await response.json();
+        title = "Upload Success";
+        description = `Text uploaded successfully.`;
+        toast({title:title, description:description});
+      } catch (error) {
+        title = "Upload Error";
+        description = "Something went wrong. Please try again.";
+        toast({title:title, description:description});
+      }
+    };
+ 
 
   const convertTextToPDF = (text) => {
     const doc = new jsPDF();
@@ -88,7 +127,8 @@ export default function ResumeScreen() {
     reader.onload = ()=>{
       const text = reader.result;
       const pdfBlob = convertTextToPDF(text);
-      uploadToBackend(pdfBlob);
+      let valid = uploadToBackend(pdfBlob);
+      return valid;
     
     }
     reader.readAsText(file);
@@ -100,7 +140,8 @@ export default function ResumeScreen() {
       const arrayBuffer = reader.result;
       const result = await mammoth.extractRawText({arrayBuffer});
       const pdfBlob = convertTextToPDF(result.value);
-      uploadToBackend(pdfBlob);
+      let valid = uploadToBackend(pdfBlob);
+      return valid;
     }
     reader.readAsArrayBuffer(file);
   }
@@ -111,10 +152,11 @@ export default function ResumeScreen() {
 
   const handleResumeUpload = () => {
     let title, description;
+    let valid = false;
 
     if (!(resume || resumeText)) {
       title = "Upload Error";
-      description = "Please select a file to upload.";
+      description = "Please select a file or paste text to upload.";
       toast({title:title, description:description});
       return;
     }
@@ -123,8 +165,7 @@ export default function ResumeScreen() {
     const fileType = resume.type;
 
     if (allowedTypes.includes(fileType)) {
-      title = "Upload Success";
-      description = `File: ${resume.name} uploaded successfully.`;
+      
       setTabValue("jobDesc");
 
       // Proceed with the upload or further processing
@@ -133,13 +174,21 @@ export default function ResumeScreen() {
       }else if(fileType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document"){
         handleDocxFile(resume)
       }else if(fileType === "application/pdf"){
-        uploadToBackend(resume)
+        valid = uploadToBackend(resume)
       }
-    } else {
+    
+      
+      
+    }
+    if(valid){
+      title = "Upload Success";
+      description = resume ?`File: ${resume.name} uploaded successfully.`: "Text uploaded successfully.";
+    }else{
       title = "Upload Error";
       description = "Please upload a valid PDF or TXT file.";
     }
     toast({title:title, description:description});
+    
   }
 
   const handleJobDescriptionChange = (e) => {
@@ -275,7 +324,7 @@ export default function ResumeScreen() {
            
           </CardContent>
           <CardFooter>
-            <Button>Calculate</Button>
+            <Button onClick={uploadJobDescription}>Calculate</Button>
           </CardFooter>
         </Card>
       </TabsContent>
