@@ -3,6 +3,8 @@ import { CircularGauge } from '@/components/NewDashboard/DashComponents/Circular
 import { SuggestedImprovements } from '@/components/NewDashboard/DashComponents/SuggestedImprovements'
 import { AverageFitScore } from '@/components/NewDashboard/DashComponents/AverageFitScore'
 
+import { ResumeScreen } from '@/screens';
+
 const improvements = [
   { text: "Update your profile picture" },
   { text: "Add more skills to your profile" },
@@ -22,12 +24,12 @@ const averageFitScoreData = [
 export default function DashboardPage() {
   return (
     <div className="flex gap-6 h-full">
-      <div className="w-1/2">
-        <StatBlock title="Input" className="h-full">
+      <div className="w-1/3">
+        <ResumeScreen title="Input" className="h-full">
           <div className="h-full flex items-center justify-center text-muted-foreground">
             Input Area
           </div>
-        </StatBlock>
+        </ResumeScreen>
       </div>
       <div className="w-1/2 flex flex-col gap-6 h-full">
         <div className="grid grid-cols-2 gap-6">
