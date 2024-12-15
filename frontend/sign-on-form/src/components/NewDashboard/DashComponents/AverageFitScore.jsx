@@ -18,14 +18,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart.tsx"
 import { Progress } from "@/components/ui/progress.tsx"
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-]
+
 
 const chartConfig = {
   desktop: {
@@ -38,12 +31,12 @@ const chartConfig = {
   },
 } 
 
-export function AverageFitScore({feedBackLoaded, feedBackLoading, progress}) {
+export function AverageFitScore({trendScore, feedBackLoaded, feedBackLoading, progress,chartData}) {
   return (
     <Card className="flex flex-col min-h-[300px]">
       
       <CardHeader>
-        <CardTitle>Average fit score</CardTitle>
+        <CardTitle>Trend Line of fit score</CardTitle>
         <CardDescription>A look into how your resume has improved over time</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pt-0 pb-0">
@@ -63,7 +56,7 @@ export function AverageFitScore({feedBackLoaded, feedBackLoading, progress}) {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="upload"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
@@ -74,7 +67,7 @@ export function AverageFitScore({feedBackLoaded, feedBackLoading, progress}) {
               content={<ChartTooltipContent indicator="line" />}
             />
             <Line
-              dataKey="desktop"
+              dataKey="score"
               type="natural"
               stroke="var(--color-desktop)"
               strokeWidth={2}
@@ -97,10 +90,10 @@ export function AverageFitScore({feedBackLoaded, feedBackLoading, progress}) {
       </CardContent>
      {feedBackLoaded && <CardFooter className="flex-col items-start gap-2 text-sm mt-10">
         <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          {`Trending by ${trendScore}% this upload`} <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing total fit scores for the last 6 uploads
+          Showing the trend of fit scores for the previous uploads
         </div>
       </CardFooter>}
       

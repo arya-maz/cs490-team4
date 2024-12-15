@@ -33,7 +33,7 @@ import {
 
 
 
-export default function ResumeScreen({setFeedBackLoaded,setFeedBackLoading,setProgress}) {
+export default function ResumeScreen({setAverageFitScoreData,setFeedBackLoaded,setFeedBackLoading,setProgress}) {
 
   const {toast} = useToast();
   const [resume, setResume] = React.useState(null);
@@ -68,11 +68,40 @@ export default function ResumeScreen({setFeedBackLoaded,setFeedBackLoading,setPr
       }
     };
 
+    const addNewFitScore = (setAverageFitScoreData, newScore) => {
+      setAverageFitScoreData((prev) => {
+        // Find the next upload number
+        const nextUpload = (prev.length > 0 ? parseInt(prev[prev.length - 1].upload) + 1 : 1).toString();
+    
+        // Create a new object
+        const newObject = { upload: nextUpload, score: newScore };
+    
+        // Return the updated array
+        return [...prev, newObject];
+      });
+    };
+
     const uploadJobDescription = async () => {
       const payload = {
         job_description: jobDescription,
       };
       let title,description;
+
+      setProgress(0);
+      setFeedBackLoading(true);
+
+    // Start a fake progress interval
+    const progressInterval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev < 90) {
+          return prev + 10; // Increment progress by 10 until 90
+        }
+        clearInterval(progressInterval); // Clear interval when progress reaches 90
+        return prev;
+      });
+    }, 200); // Update progress every 200ms
+
+
       try {
         const response = await fetch(`${base_url}/api/job-description`, {
           method: 'POST',
@@ -87,14 +116,29 @@ export default function ResumeScreen({setFeedBackLoaded,setFeedBackLoading,setPr
         }
     
         const data = await response.json();
+
+        //inset analyze api call here get fit score and suggested improvements
+
+
         title = "Upload Success";
         description = `Text uploaded successfully.`;
+        setFeedBackLoaded(true);
+        setFeedBackLoading(false);
+        setProgress(100);
         toast({title:title, description:description});
+
+        addNewFitScore(setAverageFitScoreData, 8);
+
+        setJobDescription("");
+        setTabValue("resume");
+        setResumeText("");
+        setResume(null);
       } catch (error) {
         title = "Upload Error";
         description = "Something went wrong. Please try again.";
         toast({title:title, description:description});
       }
+      
     };
  
 
