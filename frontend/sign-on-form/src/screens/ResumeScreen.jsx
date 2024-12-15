@@ -33,7 +33,7 @@ import {
 
 
 
-export default function ResumeScreen() {
+export default function ResumeScreen({setFeedBackLoaded,setFeedBackLoading,setProgress}) {
 
   const {toast} = useToast();
   const [resume, setResume] = React.useState(null);
@@ -98,7 +98,7 @@ export default function ResumeScreen() {
     };
  
 
-  const convertTextToPDF = (text) => {
+    const convertTextToPDF = (text) => {
     const doc = new jsPDF();
     const pageHeight = doc.internal.pageSize.height; // Page height
     const margin = 10; // Margin from the edges
@@ -119,7 +119,7 @@ export default function ResumeScreen() {
 
     const pdfBlob = doc.output('blob'); // Generate the PDF as a Blob
     return pdfBlob;
-};
+    };
 
   
   const handleTxtFile = (file)=>{
@@ -336,6 +336,4 @@ export default function ResumeScreen() {
   );
 }
 
-const styles = {
-  
-};
+

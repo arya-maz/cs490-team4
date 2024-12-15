@@ -1,52 +1,110 @@
-import React from 'react';
-import { Line, LineChart, ResponsiveContainer, Tooltip } from 'recharts';
-import PropTypes from 'prop-types';
+"use client"
 
-export function AverageFitScore({ data }) {
+import { TrendingUp } from "lucide-react"
+import { CartesianGrid, LabelList, Line, LineChart, XAxis } from "recharts"
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card.tsx"
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart.tsx"
+import { Progress } from "@/components/ui/progress.tsx"
+const chartData = [
+  { month: "January", desktop: 186, mobile: 80 },
+  { month: "February", desktop: 305, mobile: 200 },
+  { month: "March", desktop: 237, mobile: 120 },
+  { month: "April", desktop: 73, mobile: 190 },
+  { month: "May", desktop: 209, mobile: 130 },
+  { month: "June", desktop: 214, mobile: 140 },
+]
+
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    color: "hsl(var(--chart-1))",
+  },
+  mobile: {
+    label: "Mobile",
+    color: "hsl(var(--chart-2))",
+  },
+} 
+
+export function AverageFitScore({feedBackLoaded, feedBackLoading, progress}) {
   return (
-    <div className="h-[200px] flex items-end justify-center">
-      <ResponsiveContainer width="90%" height="80%">
-        <LineChart data={data}>
-          <Tooltip
-            content={({ active, payload }) => {
-              if (active && payload && payload.length) {
-                return (
-                  <div className="rounded-lg border bg-background p-2 shadow-sm">
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="flex flex-col">
-                        <span className="text-[0.70rem] uppercase text-muted-foreground">Date</span>
-                        <span className="font-bold text-muted-foreground">{payload[0].payload.date}</span>
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="text-[0.70rem] uppercase text-muted-foreground">Score</span>
-                        <span className="font-bold">{payload[0].value}</span>
-                      </div>
-                    </div>
-                  </div>
-                )
-              }
-              return null
+    <Card className="flex flex-col min-h-[300px]">
+      
+      <CardHeader>
+        <CardTitle>Average fit score</CardTitle>
+        <CardDescription>A look into how your resume has improved over time</CardDescription>
+      </CardHeader>
+      <CardContent className="flex-1 pt-0 pb-0">
+      {!feedBackLoaded && !feedBackLoading && <div className="flex items-center justify-center h-full">
+      <p>No data yet</p>
+      </div>}
+      {feedBackLoading && <div className="flex items-center justify-center h-full"><Progress value={progress} /></div>}
+        {feedBackLoaded &&<ChartContainer config={chartConfig}>
+          <LineChart
+            accessibilityLayer
+            data={chartData}
+            margin={{
+              top: 20,
+              left: 12,
+              right: 12,
             }}
-          />
-          <Line 
-            type="monotone" 
-            dataKey="score" 
-            stroke="#8884d8" 
-            strokeWidth={2} 
-            dot={{ r: 4, fill: "#8884d8" }}
-            activeDot={{ r: 6, fill: "#8884d8" }}
-          />
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
+          >
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="month"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              tickFormatter={(value) => value.slice(0, 3)}
+            />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent indicator="line" />}
+            />
+            <Line
+              dataKey="desktop"
+              type="natural"
+              stroke="var(--color-desktop)"
+              strokeWidth={2}
+              dot={{
+                fill: "var(--color-desktop)",
+              }}
+              activeDot={{
+                r: 6,
+              }}
+            >
+              <LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+              />
+            </Line>
+          </LineChart>
+        </ChartContainer>}
+      </CardContent>
+     {feedBackLoaded && <CardFooter className="flex-col items-start gap-2 text-sm mt-10">
+        <div className="flex gap-2 font-medium leading-none">
+          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+        </div>
+        <div className="leading-none text-muted-foreground">
+          Showing total fit scores for the last 6 uploads
+        </div>
+      </CardFooter>}
+      
+      
+    </Card>
   )
 }
-
-AverageFitScore.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      date: PropTypes.string.isRequired,
-      score: PropTypes.number.isRequired,
-    })
-  ).isRequired,
-};
