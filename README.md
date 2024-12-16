@@ -20,8 +20,8 @@ Project uses ChatGPT AI to take inputs (Resumes) and return feedback.
    - To stop docker: `docker-compose down`
 
    ## Endpoints:
-  - Backend server (FastAPI): [http://localhost:8000/docs](http://localhost:8000/docs)
-   - Frontend server (React.js): [http://localhost:3000](http://localhost:3000)
+  - `Backend server (FastAPI)`: [http://localhost:8000/docs](http://localhost:8000/docs)
+   - `Frontend server (React.js)`: [http://localhost:3000](http://localhost:3000)
 
 # How To Initialize And Run The FastAPI Endpoints
 
