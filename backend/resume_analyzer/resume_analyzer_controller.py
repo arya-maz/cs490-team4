@@ -32,7 +32,6 @@ def analyze_resume(resume_uid: ResumeAnalyzerPayload):
 
     return parse_ai_response(response.text)
 
-
     # openai.my_api_key = os.getenv("OPEN_AI_KEY")
     # client = openai.OpenAI()
     #
@@ -62,10 +61,11 @@ def analyze_resume(resume_uid: ResumeAnalyzerPayload):
 
 def parse_ai_response(ai_response):
     split_response = ai_response.split('\n')
-    feedback_points = split_response[0]
-    feedback = feedback_points.split('.')
     stripped_points = []
-    for point in feedback:
-        stripped_points.append(point.strip())
-    score = split_response[2]
-    return ResumeAnalyzerResult(feedback=stripped_points, fit_score=score)
+    for i in range(len(split_response)):
+        if len(split_response[i]) != 0:
+            stripped_points.append(split_response[i])
+
+    feedback_points = stripped_points[0].split('.')
+    score = stripped_points[-1]
+    return ResumeAnalyzerResult(feedback=feedback_points, fit_score=score)
