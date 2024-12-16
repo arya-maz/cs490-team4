@@ -21,7 +21,14 @@ Project uses ChatGPT AI to take inputs (Resumes) and return feedback.
 
    ## Endpoints:
   - `Backend server (FastAPI)`: [http://localhost:8000/docs](http://localhost:8000/docs)
-   - `Frontend server (React.js)`: [http://localhost:3000](http://localhost:3000)
+  - `Frontend server (React.js)`: [http://localhost:3000](http://localhost:3000)
+
+   ## Endpoint Screens:
+![image](https://github.com/user-attachments/assets/1e5d0dc0-3063-4ea6-8f3b-ce2dbba52d57)
+![image](https://github.com/user-attachments/assets/b6c0f67e-6ccb-4914-acd9-d68755e99190)
+
+
+   
 
 # How To Initialize And Run The FastAPI Endpoints
 
