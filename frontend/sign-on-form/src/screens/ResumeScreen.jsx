@@ -94,6 +94,7 @@ export default function ResumeScreen({setAverageFitScoreData,setFeedBackLoaded,s
     };
 
     const uploadJobDescription = async () => {
+      setFeedBackLoaded(false);
       if (!ud) {
         console.error('UID is not set yet!');
         return;
@@ -133,9 +134,10 @@ export default function ResumeScreen({setAverageFitScoreData,setFeedBackLoaded,s
     
         const data = await response.json();
         const result = await fetchFitScoreAndFeedback(data.uid);
-    
+        let avgUpdateScore;
         if (result) {
           const { feedBack, fitScore } = result;
+          avgUpdateScore = fitScore;
           setFeedBack(feedBack);
           setFitScore(fitScore);
         }
@@ -147,7 +149,7 @@ export default function ResumeScreen({setAverageFitScoreData,setFeedBackLoaded,s
         setProgress(100);
         toast({ title: title, description: description });
     
-        addNewFitScore(setAverageFitScoreData, 8);
+        addNewFitScore(setAverageFitScoreData, avgUpdateScore);
         setJobDescription("");
         setTabValue("resume");
         setResumeText("");
