@@ -38,17 +38,32 @@ export default function DashboardPage() {
   const [progress, setProgress] = useState(0);
   const [averageFitScoreData, setAverageFitScoreData] = useState([]);
   const [trendScore, setTrendScore] = useState(0);
+  const [feedBack, setFeedBack] = useState([]);
+  const [fitScore, setFitScore] = useState(0);
 
 
   useEffect(() => {
     calculateTrend(averageFitScoreData, setTrendScore);
   }, [averageFitScoreData]);
-  
+
+  useEffect(() => {
+    // Fetch feedback and fitScore when it changes
+    if (feedBackLoaded) {
+      setFeedBack(feedBack);
+      setFitScore(fitScore);
+    }
+  }, [feedBack, fitScore, feedBackLoaded]);
+
+  const transformedFeedBack = feedBack
+  .filter(item => item.trim() !== "") // Remove empty strings
+  .map(item => ({ text: item })); // Convert strings to objects
+
+
   return (
     <div className="flex gap-8 h-full p-6">
   {/* Left Panel */}
   <div className="w-[35%] flex items-center justify-center">
-    <ResumeScreen setAverageFitScoreData = {setAverageFitScoreData} setFeedBackLoaded={setFeedBackLoaded} setFeedBackLoading={setFeedBackLoading} setProgress={setProgress}/>
+    <ResumeScreen setAverageFitScoreData = {setAverageFitScoreData} setFeedBackLoaded={setFeedBackLoaded} setFeedBackLoading={setFeedBackLoading} setProgress={setProgress} setFeedBack={setFeedBack} setFitScore={setFitScore}/>
   </div>
 
   {/* Main Content Area */}
@@ -57,7 +72,7 @@ export default function DashboardPage() {
     <div className="grid grid-cols-2 gap-8">
       
       
-          <CircularGauge score={7} maxScore={10} feedBackLoaded={feedBackLoaded} feedBackLoading={feedBackLoading} progress={progress}/>
+          <CircularGauge score={fitScore} maxScore={100} feedBackLoaded={feedBackLoaded} feedBackLoading={feedBackLoading} progress={progress}/>
           <AverageFitScore trendScore={trendScore} chartData={averageFitScoreData} feedBackLoaded ={feedBackLoaded} feedBackLoading={feedBackLoading} progress={progress}/>
      
           
@@ -68,7 +83,7 @@ export default function DashboardPage() {
 
     {/* Bottom Panel */}
     <StatBlock title="Suggested Improvements" className="flex-grow overflow-auto">
-      <SuggestedImprovements improvements={improvements} feedBackLoaded={feedBackLoaded} feedBackLoading={feedBackLoading} progress={progress}/>
+      <SuggestedImprovements improvements={transformedFeedBack} feedBackLoaded={feedBackLoaded} feedBackLoading={feedBackLoading} progress={progress}/>
     </StatBlock>
   </div>
 </div>

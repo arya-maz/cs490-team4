@@ -1,5 +1,8 @@
 "use client"
-
+/**
+ * This file is responsble for the "Your Fit Score"
+ * 
+ */
 import { TrendingUp } from "lucide-react"
 import {
   Label,

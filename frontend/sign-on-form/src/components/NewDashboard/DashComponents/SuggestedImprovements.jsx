@@ -1,3 +1,8 @@
+/**
+ * This file is responsible for the "Suggested Improvements" block
+ * 
+ */
+
 import React from 'react';
 import { Check } from 'lucide-react';
 import PropTypes from 'prop-types';
