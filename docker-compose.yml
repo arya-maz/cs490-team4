@@ -1,23 +1,22 @@
 version: '3.8'
+
 services:
   backend:
     build:
       context: .
-      dockerfile: Dockerfile.backend  # Pointing to the renamed backend Dockerfile
+      dockerfile: Dockerfile.backend
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app
+      - ./backend:/app/backend
     environment:
       - PYTHONUNBUFFERED=1
 
   frontend:
     build:
       context: .
-      dockerfile: Dockerfile.frontend  # Pointing to the renamed frontend Dockerfile
+      dockerfile: Dockerfile.frontend
     ports:
       - "3000:3000"
     volumes:
-      - ./frontend/sign-on-form:/app
-    environment:
-      - NODE_ENV=development
+      - ./frontend:/app/frontend

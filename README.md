@@ -13,6 +13,16 @@ Project uses ChatGPT AI to take inputs (Resumes) and return feedback.
 
 <a href="https://trello.com/b/KFmJz5Q3/cs490-ai-powered-resume-analyzer-and-job-matcher">Trello Board</a>
 
+# How To Run Project using Docker
+   - Make sure Docker is installed
+   - In the `CS490-team4` directory,
+   - Run: `docker-compose up --build`
+   - To stop docker: `docker-compose down`
+
+   ## Endpoints:
+  - Backend server (FastAPI): [http://localhost:8000/docs](http://localhost:8000/docs)
+   - Frontend server (React.js): [http://localhost:3000](http://localhost:3000)
+
 # How To Initialize And Run The FastAPI Endpoints
 
 1. First you will need to initialize a local python environment in the root directory of the project. Run `python3 -m venv venv` while
