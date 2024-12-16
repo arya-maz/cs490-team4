@@ -41,8 +41,8 @@ export default function ResumeScreen({setAverageFitScoreData,setFeedBackLoaded,s
   const [jobDescription, setJobDescription] = React.useState("");
   const [resumeTabValue, setResumeTabValue] = React.useState("fileUpload");
   const [resumeText, setResumeText] = React.useState("");
-  const jobDescriptionCharLimit = 500;
-  const resumeTextCharLimit = 1000;
+  const jobDescriptionCharLimit = 5000;
+  const resumeTextCharLimit = 10000;
   const [tabValue, setTabValue] = React.useState("resume");
   const base_url = "http://localhost:8000";
 
