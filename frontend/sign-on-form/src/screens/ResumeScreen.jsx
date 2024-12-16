@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button2.tsx"
 import jsPDF from 'jspdf';
 import mammoth from 'mammoth';
-import {Paperclip,LetterText, AArrowUp, FileUp} from "lucide-react"
+import {Paperclip,LetterText, AArrowUp, FileUp} from "lucide-react";
+import axios from 'axios';
 import {
   Card,
   CardContent,
@@ -33,19 +34,23 @@ import {
 
 
 
-export default function ResumeScreen({setAverageFitScoreData,setFeedBackLoaded,setFeedBackLoading,setProgress}) {
+export default function ResumeScreen({setAverageFitScoreData,setFeedBackLoaded,setFeedBackLoading,setProgress, setFeedBack, setFitScore}) {
 
   const {toast} = useToast();
   const [resume, setResume] = React.useState(null);
   const [jobDescription, setJobDescription] = React.useState("");
   const [resumeTabValue, setResumeTabValue] = React.useState("fileUpload");
   const [resumeText, setResumeText] = React.useState("");
-  const jobDescriptionCharLimit = 500;
-  const resumeTextCharLimit = 1000;
+  const jobDescriptionCharLimit = 5000;
+  const resumeTextCharLimit = 10000;
   const [tabValue, setTabValue] = React.useState("resume");
-  const base_url = "http://127.0.0.1:8000"
+  const base_url = "http://localhost:8000";
+
+  //let ud;
   
     //write code to upload the blob to the backend endpoint http://127.0.0.1:8000/ the endpoint accepts json resume_file *string($binary)
+    const [ud, setUd] = useState(null);
+
     const uploadToBackend = async (blob) => {
       const formData = new FormData();
       formData.append('resume_file', blob);
@@ -60,10 +65,17 @@ export default function ResumeScreen({setAverageFitScoreData,setFeedBackLoaded,s
           throw new Error('Network response was not ok');
         }
     
-        const data = await response.json(); //should have uid
+        const data = await response.json(); // Should have uid
+        console.log('Upload Response:', data);
+    
+        if (data && data.uid) {
+          setUd(data.uid); // Update the state variable 'ud'
+          console.log('UID:', data.uid); // Should print the UID
+        }
+    
         return true;
       } catch (error) {
-        
+        console.error('Error uploading resume:', error);
         return false;
       }
     };
@@ -82,26 +94,30 @@ export default function ResumeScreen({setAverageFitScoreData,setFeedBackLoaded,s
     };
 
     const uploadJobDescription = async () => {
+      if (!ud) {
+        console.error('UID is not set yet!');
+        return;
+      }
+    
       const payload = {
+        uid: ud,
         job_description: jobDescription,
       };
-      let title,description;
-
+      let title, description;
       setProgress(0);
       setFeedBackLoading(true);
-
-    // Start a fake progress interval
-    const progressInterval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev < 90) {
-          return prev + 10; // Increment progress by 10 until 90
-        }
-        clearInterval(progressInterval); // Clear interval when progress reaches 90
-        return prev;
-      });
-    }, 200); // Update progress every 200ms
-
-
+    
+      // Start a fake progress interval
+      const progressInterval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev < 90) {
+            return prev + 10;
+          }
+          clearInterval(progressInterval);
+          return prev;
+        });
+      }, 200);
+    
       try {
         const response = await fetch(`${base_url}/api/job-description`, {
           method: 'POST',
@@ -116,19 +132,22 @@ export default function ResumeScreen({setAverageFitScoreData,setFeedBackLoaded,s
         }
     
         const data = await response.json();
-
-        //inset analyze api call here get fit score and suggested improvements
-
-
+        const result = await fetchFitScoreAndFeedback(data.uid);
+    
+        if (result) {
+          const { feedBack, fitScore } = result;
+          setFeedBack(feedBack);
+          setFitScore(fitScore);
+        }
+    
         title = "Upload Success";
-        description = `Text uploaded successfully.`;
+        description = `Job description uploaded successfully.`;
         setFeedBackLoaded(true);
         setFeedBackLoading(false);
         setProgress(100);
-        toast({title:title, description:description});
-
+        toast({ title: title, description: description });
+    
         addNewFitScore(setAverageFitScoreData, 8);
-
         setJobDescription("");
         setTabValue("resume");
         setResumeText("");
@@ -136,11 +155,24 @@ export default function ResumeScreen({setAverageFitScoreData,setFeedBackLoaded,s
       } catch (error) {
         title = "Upload Error";
         description = "Something went wrong. Please try again.";
-        toast({title:title, description:description});
+        toast({ title: title, description: description });
       }
-      
     };
- 
+
+    
+    const fetchFitScoreAndFeedback = async (sendUid) => {
+      try {
+        const response = await axios.post('http://localhost:8000/api/analyze', { uid: sendUid });
+        const feedBack = response.data.feedback;
+        const fitScore = response.data.fit_score;
+        console.log("response: ", feedBack, fitScore);
+        return { feedBack, fitScore };
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+        return false;
+      }
+    };
+    
 
     const convertTextToPDF = (text) => {
     const doc = new jsPDF();

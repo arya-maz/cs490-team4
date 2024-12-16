@@ -1,5 +1,8 @@
 "use client"
-
+/**
+ * This file is responsble for the "Your Fit Score"
+ * 
+ */
 import { TrendingUp } from "lucide-react"
 import {
   Label,
@@ -89,7 +92,7 @@ export function CircularGauge({score,maxScore, feedBackLoaded, feedBackLoading, 
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          out of 10
+                          out of 100
                         </tspan>
                       </text>
                     );

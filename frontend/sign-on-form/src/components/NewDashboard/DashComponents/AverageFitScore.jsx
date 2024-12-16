@@ -1,5 +1,9 @@
 "use client"
 
+/**
+ * This file is responsible for the "Trend Line of fit score" block
+ * 
+ */
 import { TrendingUp } from "lucide-react"
 import { CartesianGrid, LabelList, Line, LineChart, XAxis } from "recharts"
 
