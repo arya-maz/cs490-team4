@@ -1,0 +1,15 @@
+# Use Node.js for building React
+FROM node:22-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies
+COPY frontend/sign-on-form/package.json frontend/sign-on-form/package-lock.json ./
+RUN npm install
+COPY frontend/sign-on-form/ .
+EXPOSE 3000
+
+# Command to run the React app
+CMD ["npm", "start"]
+
