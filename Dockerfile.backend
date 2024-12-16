@@ -1,0 +1,29 @@
+# Use a Python base image
+FROM python:3.12-slim
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the requirements.txt file to the container
+COPY requirements.txt .
+
+# Install dependencies from the requirements.txt file
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the backend files into the container's working directory
+COPY backend/ /app/backend/
+
+# Ensure Python doesn't buffer output (useful for logging)
+ENV PYTHONUNBUFFERED=1
+
+# Expose port 8000 for FastAPI
+EXPOSE 8000
+
+# Set the environment variable for Python to use the correct path
+ENV PYTHONPATH="/app"
+
+# Add debugging (optional) to verify the files and directory structure inside the container
+RUN ls -R /app
+
+# Command to run the FastAPI application
+CMD ["uvicorn", "backend.app:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -1,12 +1,32 @@
 import React from 'react';
 import { Home, LogOut } from 'lucide-react';
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 
 const navItems = [
-  { icon: Home, label: 'Dashboard', href: '/dashboard' },
+  { icon: Home, label: 'Dashboard', href: '/dashboard2' },
 ];
 
+//Log Out function
+const useLogout = () => {
+  const navigate = useNavigate(); // Initialize useNavigate inside the custom hook
+  
+  const logout = () => {
+    console.log('Logout button clicked'); // Debugging message
+    localStorage.removeItem('token'); // Clear JWT
+    console.log('Logged out successfully.');
+    navigate('/'); // Redirect to login page
+  };
+
+  return { logout };
+};
+
+
+
 export function Sidebar({ className, ...props }) {
+
+  const { logout } = useLogout(); // custom hook invoked inside a component
+
   return (
     <div className={`bg-card flex flex-col ${className}`} {...props}>
       <div className="p-6">
@@ -27,7 +47,7 @@ export function Sidebar({ className, ...props }) {
       <div className="p-6">
         <button 
           className="w-full flex items-center justify-start px-4 py-2 text-white hover:text-white hover:bg-accent rounded-md transition-colors duration-200"
-          onClick={() => console.log('Logout clicked')}
+          onClick={logout} //loging out
         >
           <LogOut className="mr-2 h-4 w-4" />
           Logout
