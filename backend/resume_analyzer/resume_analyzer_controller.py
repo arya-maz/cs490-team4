@@ -13,7 +13,7 @@ class ResumeAnalyzerPayload(BaseModel):
 
 
 class ResumeAnalyzerResult(BaseModel):
-    fit_score: int
+    fit_score: str
     feedback: List[str]
 
 
