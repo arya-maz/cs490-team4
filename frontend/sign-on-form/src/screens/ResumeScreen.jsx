@@ -81,6 +81,10 @@ export default function ResumeScreen({setAverageFitScoreData,setFeedBackLoaded,s
       });
     };
 
+
+    //use to export data/uid
+    export const sendUid = null;
+
     const uploadJobDescription = async () => {
       const payload = {
         job_description: jobDescription,
@@ -116,6 +120,8 @@ export default function ResumeScreen({setAverageFitScoreData,setFeedBackLoaded,s
         }
     
         const data = await response.json();
+
+        sendUid = data;
 
         //inset analyze api call here get fit score and suggested improvements
 
