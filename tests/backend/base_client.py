@@ -4,6 +4,8 @@ from io import BytesIO
 from backend.resume_upload.resume_upload_controller import UploadResponse, JobDescriptionPayload
 from backend.user_login.user_login import LoginPayload, LoginResponse
 from backend.user_signup.user_signup import SignupResponse, UserSignupPayload
+from backend.resume_analyzer.resume_analyzer_controller import ResumeAnalyzerPayload
+from backend.resume_analyzer.resume_analyzer_controller import ResumeAnalyzerResult
 
 
 class TestApiBaseClient(TestClient):
@@ -50,3 +52,10 @@ class TestApiBaseClient(TestClient):
             return LoginResponse(**response.json())
         else:
             return ''
+
+    def analyze_resume(self, uid: str):
+        if uid is not None:
+            payload = {"uid": uid}
+            url = self.url('analyze')
+            response = self.post(url, json=ResumeAnalyzerPayload(**payload).model_dump())
+            return ResumeAnalyzerResult(**response.json())

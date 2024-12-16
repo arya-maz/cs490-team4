@@ -62,6 +62,15 @@ Project uses ChatGPT AI to take inputs (Resumes) and return feedback.
 4. Import the router into `backend/app.py` and initialize it with `app.include_router(<your-endpoint>)`.
 5. Run it with `fastapi dev backend/app.py` to make sure everything is correct.
 
+# How to connect Gemini LLM
+
+1. Create your own Gemini API Key by following <a href="https://ai.google.dev/">this link</a>
+2. Once you get the API
+3. Find the `.env` file inside the `backend/resume_analyzer` folder
+4. Open the file to reveal a blank field called `GEMINI_API_KEY`
+5. Copy and paste your Gemini API Key inside of that file to enable the AI functionality
+6. Enjoy!
+
 <i>Good Luck Coding!</i>
 
 # FrontEnd Instructions

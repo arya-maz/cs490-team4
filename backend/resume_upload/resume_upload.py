@@ -1,6 +1,6 @@
 from fastapi import APIRouter, File, UploadFile
 from backend.resume_upload.resume_upload_controller import *
-
+from backend.resume_upload.resume_upload_controller import parse_pdf
 resume_router = APIRouter()
 
 
@@ -14,7 +14,8 @@ async def resume_upload(resume_file: UploadFile = File(...)) -> UploadResponse:
 
     if len(pdf_file) > max_file_size:
         return UploadResponse(message=ResumeUploadMessages.TooLarge, status=Status.Error)
-    return UploadResponse(message=ResumeUploadMessages.ResumeUploadSuccess, status=Status.Success)
+    parsed_pdf_uid = parse_pdf(pdf_file)
+    return UploadResponse(uid=parsed_pdf_uid, message=ResumeUploadMessages.ResumeUploadSuccess, status=Status.Success)
 
 
 @resume_router.post('/api/job-description')
