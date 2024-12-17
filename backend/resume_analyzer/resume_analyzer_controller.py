@@ -26,8 +26,8 @@ def analyze_resume(resume_uid: ResumeAnalyzerPayload):
     model = genai.GenerativeModel('gemini-1.5-flash')
     response = model.generate_content(f'''You are an expert resume reviewer. Your job is to provide feedback to the provided resume in the format: "
                                           "<feedback-point-1>,<feedback-point-2>,<feedback-point-n>"
-                                          "The resume feedback points need to be one sentence bullet points, comma separated. I will give a resume and a job description, and then you will have to analyze it and provide a fit score for the job on the from 0 to 100. After finishin the bullet points, on the new line write score out of 100. The fit score should be in the format:<score>"
-                                          "The feedback should also be provided with the words you, to specify that you are talking to a person. Focus on matching skills, experience, and education to the job description."
+                                          "The resume feedback points need to be one sentence bullet points. I will give a resume and a job description, and then you will have to analyze it and provide a fit score for the job on the from 0 to 100. After finishin the bullet points, on the new line write score out of 100. The fit score should be in the format:<score>"
+                                          "The feedback should also be provided with the words you, to specify that you are talking to a person. Focus on matching skills, experience, and education to the job description. The sentences should end with a period, but have no periods inside of sentences (for example the period inside of e.g. is not valid)"
                                           resume text: {resume_storage.get("resume_text")} job description: {resume_storage.get("job_description")}''')
 
     return parse_ai_response(response.text)

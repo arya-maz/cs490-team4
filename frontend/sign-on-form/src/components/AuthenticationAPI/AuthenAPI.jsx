@@ -7,8 +7,13 @@ import { useNavigate } from "react-router-dom";
 export const login = async (email, password) => {
   try {
     const response = await axios.post('http://localhost:8000/api/login', { email, password });
-    const { token } = response.data;
-    localStorage.setItem('token', token); // Save JWT to localStorage
+    const { token, status} = response.data;
+
+    if (status === 'Error') {
+      return false;
+    }
+
+    localStorage.setItem('token', token);
     console.log('Login successful:', token);
     return true;
   } catch (error) {

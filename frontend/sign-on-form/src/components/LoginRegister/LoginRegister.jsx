@@ -52,11 +52,11 @@ const LoginRegister = ({ action, registerLink, loginLink }) => {
             <FaLock className="icon" />
           </div>
           <div className="remember-forgot">
-            <label>
-              <input type="checkbox" />
-              Remember me
-            </label>
-            <a href="#">Forgot password?</a>
+{/*             <label> */}
+{/*               <input type="checkbox" /> */}
+{/*               Remember me */}
+{/*             </label> */}
+{/*             <a href="#">Forgot password?</a> */}
           </div>
           <button type="submit">Login</button>
           <div className="register-link">
@@ -130,10 +130,10 @@ const LoginRegister = ({ action, registerLink, loginLink }) => {
             <FaLock className="icon" />
           </div>
           <div className="remember-forgot">
-            <label>
-              <input type="checkbox" required />
-              I agree to the terms & conditions
-            </label>
+{/*             <label> */}
+{/*               <input type="checkbox" required /> */}
+{/*               I agree to the terms & conditions */}
+{/*             </label> */}
           </div>
           <button type="submit">Register</button>
           <div className="register-link">

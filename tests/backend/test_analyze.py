@@ -5,7 +5,7 @@ import requests
 
 def test_resume_analyze():
     test_client = TestApiBaseClient()
-    file_path = "./test_resume/kyryloHoncharov.pdf"
+    file_path = "backend/tests/test_resume/kyryloHoncharov.pdf"
     with open(file_path, 'rb') as f:
         pdf_bytes = f.read()
     # resume_text = requests.get("https://announcements.asx.com.au/asxpdf/20171108/pdf/43p1l61zf2yct8.pdf")
